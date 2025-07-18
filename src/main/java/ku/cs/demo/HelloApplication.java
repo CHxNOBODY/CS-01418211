@@ -13,13 +13,14 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         configRouters();
         FXRouter.bind(this, stage, "01418211 Software Construction");
-        FXRouter.goTo("hello");
+        FXRouter.goTo("student-list");
     }
 
     private void configRouters() {
         String viewPath = "ku/cs/views/";
         FXRouter.when("hello", viewPath + "hello-view.fxml");
         FXRouter.when("student-profile", viewPath + "student.fxml");
+        FXRouter.when("student-list", viewPath + "student-list.fxml");
     }
 
     public static void main(String[] args) {

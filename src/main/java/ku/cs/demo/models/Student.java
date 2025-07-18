@@ -5,13 +5,38 @@ public class Student {
     private String name;
     private double score;
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", score=" + score +
-                '}';
+    public Student(String id, String name) {
+        this.id = id;
+        this.name = name;
+        score = 0;
+    }
+
+    public void changeName(String name) {
+        if (!name.trim().equals("")) {
+            this.name = name.trim();
+        }
+
+        // trim = strip() in python
+    }
+
+    public void addScore(double score) {
+        if (score > 0) {
+            this.score += score;
+        }
+    }
+
+    // TODO: design grading system for Student
+    public String grade()
+    {
+        return "F";
+    }
+
+    public boolean isId(String id) {
+        return this.id.equals(id);  // object/reference type เปรียบเทียบเท่ากันด้วย method .equals() ex. String
+                                    // interface Comparable, Comparator
+
+        // return this.id == id;    // primitive type เปรียบเทียบเท่ากัน ด้วย operator ==
+                                    // null เปรียบเทียบด้วย ==
     }
 
     public String getId() {
@@ -26,12 +51,12 @@ public class Student {
         return score;
     }
 
-    public void addScore(double score) {
-        this.score += score;
-    }
-
-    public Student(String id, String name) {
-        this.id = id;
-        this.name = name;
+    @Override
+    public String toString() {
+        return "{" +
+                "id: '" + id + '\'' +
+                ", name: '" + name + '\'' +
+                ", score: " + score +
+                '}';
     }
 }

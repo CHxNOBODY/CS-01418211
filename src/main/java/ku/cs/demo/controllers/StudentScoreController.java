@@ -67,6 +67,15 @@ public class StudentScoreController {
     }
 
     @FXML
+    public void handleBackToStudentGridView() {
+        try {
+            FXRouter.goTo("student-grid-view");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
     public void handleBackToStudentsTableButton() {
         try {
             FXRouter.goTo("students-table");

@@ -4,17 +4,18 @@ public class Student {
     private String id;
     private String name;
     private double score;
+    private String grade;
 
     public Student(String id, String name) {
-        this.id = id;
-        this.name = name;
-        score = 0;
+        this(id, name, 0);
     }
+
 
     public Student(String id, String name, double score) {
         this.id = id;
         this.name = name;
         this.score = score;
+        this.grade = grading();
     }
 
     public void changeName(String name) {
@@ -24,6 +25,8 @@ public class Student {
 
         // trim = strip() in python
     }
+
+
 
     public void addScore(double score) {
         if (score > 0) {
@@ -57,6 +60,8 @@ public class Student {
         return score;
     }
 
+    public String getGrade() { return grade; }
+
     @Override
     public String toString() {
         return "{" +
@@ -64,5 +69,28 @@ public class Student {
                 ", name: '" + name + '\'' +
                 ", score: " + score +
                 '}';
+    }
+
+    public String grading() {
+        if (score >= 80) {
+            grade = "A";
+        } else if (score >= 70) {
+            grade = "B";
+        } else if (score >= 60) {
+            grade = "C";
+        } else if (score >= 50) {
+            grade = "D";
+        } else {
+            grade = "F";
+        }
+        return grade;
+    }
+
+    public boolean isIdContains(String id) {
+        return this.id.contains(id);
+    }
+
+    public boolean isNameContains(String name) {
+        return this.name.toLowerCase().contains(name.toLowerCase());
     }
 }

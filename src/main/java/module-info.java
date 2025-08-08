@@ -14,4 +14,7 @@ module ku.cs {
 
     exports ku.cs.demo.models;
     opens ku.cs.demo.models to javafx.base;
+
+    exports ku.cs.demo.controllers.components;
+    opens ku.cs.demo.controllers.components to javafx.fxml;
 }

@@ -3,12 +3,18 @@ package ku.cs.demo.controllers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import ku.cs.demo.models.Student;
 import ku.cs.demo.models.StudentList;
-import ku.cs.demo.services.StudentHardCodeDatasource;
+import ku.cs.demo.services.Datasource;
+import ku.cs.demo.services.FXRouter;
+import ku.cs.demo.services.StudentListFileDatasource;
+import ku.cs.demo.services.StudentListHardCodeDatasource;
+
+import java.io.IOException;
 
 public class StudentListController {
     @FXML private ListView<Student> studentListView;
@@ -22,10 +28,16 @@ public class StudentListController {
     private StudentList studentList;
     private Student selectedStudent;
 
+    private Datasource<StudentList> datasource;
+
     @FXML
     public void initialize() {
+        errorLabel.setText("");
         clearStudentInfo();
-        StudentHardCodeDatasource datasource = new StudentHardCodeDatasource();
+
+//        Datasource<StudentList> datasource = new StudentListHardCodeDatasource();
+        datasource = new StudentListFileDatasource("data", "student-list.csv");
+
         studentList = datasource.readData();
         showList(studentList);
         studentListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Student>() {
@@ -53,34 +65,43 @@ public class StudentListController {
         scoreLabel.setText(String.format("%.2f", student.getScore()));
     }
 
-    @FXML
-    public void onGiveScoreButtonClick(){
-        if (selectedStudent != null) {
-            String scoreText = giveScoreTextField.getText();
-            String errorMassage = "";
-
-            try {
-                double score = Double.parseDouble(scoreText);
-                selectedStudent.addScore(score);
-                showStudentInfo(selectedStudent);
-            } catch (NumberFormatException e) {
-                errorMassage = "Please enter a number";
-            } finally {
-                if (errorMassage.equals("")) {
-                    errorLabel.setText("");
-                    giveScoreTextField.clear();
-                } else {
-                    errorLabel.setText(errorMassage);
-                }
-            }
-        } else {
-            errorLabel.setText("Please select a student");
-        }
-    }
-
     private void clearStudentInfo() {
         idLabel.setText("");
         nameLabel.setText("");
         scoreLabel.setText("");
+    }
+
+    @FXML
+    public void onBackButtonClick() {
+        try {
+            FXRouter.goTo("hello");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void onGiveScoreButtonClick() {
+        if (selectedStudent != null) {
+            String scoreText = giveScoreTextField.getText();
+            String errorMessage = "";
+            try {
+                double score = Double.parseDouble(scoreText);
+                studentList.giveScoreToId(selectedStudent.getId(), score);
+                showStudentInfo(selectedStudent);
+                datasource.writeData(studentList);
+            } catch (NumberFormatException e) {
+                errorMessage = "Please insert number value";
+                errorLabel.setText(errorMessage);
+            } finally {
+                if (errorMessage.equals("")) {
+                    giveScoreTextField.setText("");
+                    errorLabel.setText("");
+                }
+            }
+        } else {
+            giveScoreTextField.setText("");
+            errorLabel.setText("");
+        }
     }
 }

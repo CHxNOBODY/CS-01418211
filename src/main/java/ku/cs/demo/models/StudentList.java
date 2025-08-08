@@ -20,6 +20,17 @@ public class StudentList {
         }
     }
 
+    public void addNewStudent(String id, String name, double score){
+        id = id.trim();
+        name = name.trim();
+        if (!name.equals("") && !id.equals("")) {
+            Student exist = findStudentById(id);
+            if (exist == null) { // อันนี้คือหาไม่เจอ
+                students.add(new Student(id, name, score));
+            }
+        }
+    }
+
     public Student findStudentById(String id) {
         // for singular in plural
         // for item in list
